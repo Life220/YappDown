@@ -1,23 +1,22 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
-
-username = ""
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import authenticate, login as auth_login
 
 def login(request):
-    global username
     if request.method == 'POST':
         username = request.POST['username']
         password = request.POST['password']
-        if authYapper():
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            auth_login(request, user)
             return redirect('home')
         else:
-            return HttpResponse('Invalid login credentials')
-    return render(request, 'login.html')
+            error_message = f'Invalid login credentials for {username}.'
+            return render(request, 'login.html', {'error_message': error_message})
+    else:
+        return render(request, 'login.html')
 
-def authYapper(password):
-    if username:
-        return True
-    return False
-
+@login_required
 def home(request):
     return render(request, 'home.html')
