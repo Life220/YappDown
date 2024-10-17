@@ -4,6 +4,7 @@ from django.http import HttpResponse
 username = ""
 
 def login(request):
+    global username
     if request.method == 'POST':
         username = request.POST['username']
         password = request.POST['password']
