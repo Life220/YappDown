@@ -30,6 +30,11 @@ echo "Applying database migrations..."
 /YappDown/venv/bin/python3 /YappDown/manage.py makemigrations
 /YappDown/venv/bin/python3 /YappDown/manage.py migrate
 
+# Build Svelte project
+echo "Building Svelte project..."
+cd /YappDown/app/static/svelte
+npm run build
+
 # Start the Django development server
 echo "Starting Django development server..."
 /YappDown/venv/bin/python3 /YappDown/manage.py runserver 0.0.0.0:8000

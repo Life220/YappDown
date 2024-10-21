@@ -33,22 +33,28 @@ RUN python3 -m venv /YappDown/venv
 RUN /YappDown/venv/bin/pip install --upgrade pip && \
     /YappDown/venv/bin/pip install django mysqlclient
 
+# Copy package.json and install Node.js dependencies
+COPY package.json /YappDown/ \
+    rollup.config.js /YappDown/
+RUN npm install
+
 ## Tailwind CSS
-# Copy package.json
-COPY package.json /YappDown/
-
-# Install Tailwind CSS
-RUN npm install tailwindcss
-
 # Initialize Tailwind CSS
 RUN npx tailwindcss init
 RUN echo "module.exports = { plugins: [require('tailwindcss'), require('autoprefixer')], };" > postcss.config.js
 
-# Copy the Tailwind CSS input file
-COPY YappDown/app/static/tailwind.css /YappDown/app/static/tailwind.css
+# # Copy the Tailwind CSS input file
+# COPY YappDown/app/static/tailwind.css /YappDown/app/static/tailwind.css
 
 # Build Tailwind CSS
 RUN npm run build:css
+
+## Svelte
+# Copy Svelte project and build it
+WORKDIR /YappDown/app/static/svelte
+RUN npm install
+RUN npm run build
+WORKDIR /YappDown
 
 # Expose port
 EXPOSE 8000
