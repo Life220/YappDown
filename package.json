@@ -1,0 +1,11 @@
+{
+    "name": "yappdown",
+    "version": "1.0.0",
+    "scripts": {
+        "build:css": "tailwindcss build app/static/tailwind.css -o app/static/main.css"
+    },
+    "dependencies": {
+      "tailwindcss": "^2.2.19",
+      "autoprefixer": "^10.3.7"
+    }
+  }

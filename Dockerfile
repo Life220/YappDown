@@ -1,5 +1,8 @@
 FROM alpine:latest
 
+# Set the timezone to UTC+2
+ENV TZ=Etc/GMT-2
+
 # Install necessary packages
 RUN apk update && \
     apk add --no-cache \
@@ -10,15 +13,17 @@ RUN apk update && \
     mariadb-client \
     mariadb-dev \
     linux-headers \
+    icu-data-full \
     bash \
     py3-virtualenv \
-    build-base
+    build-base \
+    tzdata \
+    nodejs \
+    npm
 
 # Set up directory
 RUN mkdir /YappDown
 WORKDIR /YappDown
-
-# Copy the existing Django project files
 COPY YappDown /YappDown
 
 # Create a virtual environment and activate it (PEP 668 compliance in Alpine Linux)
@@ -27,6 +32,23 @@ RUN python3 -m venv /YappDown/venv
 # Upgrade pip and install Python packages within the virtual environment
 RUN /YappDown/venv/bin/pip install --upgrade pip && \
     /YappDown/venv/bin/pip install django mysqlclient
+
+## Tailwind CSS
+# Copy package.json
+COPY package.json /YappDown/
+
+# Install Tailwind CSS
+RUN npm install tailwindcss
+
+# Initialize Tailwind CSS
+RUN npx tailwindcss init
+RUN echo "module.exports = { plugins: [require('tailwindcss'), require('autoprefixer')], };" > postcss.config.js
+
+# Copy the Tailwind CSS input file
+COPY YappDown/app/static/tailwind.css /YappDown/app/static/tailwind.css
+
+# Build Tailwind CSS
+RUN npm run build:css
 
 # Expose port
 EXPOSE 8000

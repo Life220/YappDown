@@ -27,6 +27,7 @@ mysql -e "FLUSH PRIVILEGES;"
 
 # Apply database migrations
 echo "Applying database migrations..."
+/YappDown/venv/bin/python3 /YappDown/manage.py makemigrations
 /YappDown/venv/bin/python3 /YappDown/manage.py migrate
 
 # Start the Django development server
