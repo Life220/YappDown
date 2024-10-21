@@ -10,34 +10,32 @@ Docker
 ### Personal choices
 #### SvelteJS
 ##### Compiles in vanila JavaScript:
-    Makes fast and efficient frontend.
+Makes fast and efficient frontend.
 #### TailwindCSS
 ##### Fast styling
 
-
-## Automatically compile and run (recommended)
-### Linux:
+## Compile and Run
+### Automatically (recommended)
+#### Linux:
 ```sh
 chmod +x yappdown.sh
 ./yappdown.sh
 ```
 
-
-
-## Manually
-### Run:
+### Manually compile 
+#### Run:
 ```sh
 docker build -t yappdown . --network=host
 docker run -d -p 8000:8000 --name yappdown-container yappdown
 ```
 
-### Stop:
+#### Stop:
 ```sh
 docker stop yappdown-container
 docker rm yappdown-container
 ```
 
-### Check logs:
+#### Check logs:
 ```sh
 docker logs yappdown-container
 ```
