@@ -24,8 +24,15 @@ chmod +x yappdown.sh
 #### Run:
 ##### Docker Image:
     docker run -p 8000:8000 yappdown
-##### or Docker Container:
+##### OR Docker Container:
     docker run -d -p 8000:8000 --name yappdown-container yappdown
+#### Stop (Docker Image):
+Find the Image with the name "yappdown" or what you named it:  
+
+    docker ps
+Stop the Image (replace "container_id_or_name" with the actual containers ID or Name):  
+
+    docker stop <container_id_or_name>
 
 #### Stop (Docker Container):
 ```sh
