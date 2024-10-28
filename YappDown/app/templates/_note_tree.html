@@ -1,0 +1,10 @@
+<ul>
+    {% for note in notes %}
+        <li>
+            <strong>{{ note.title }}</strong>: {{ note.content }}
+            {% if note.subnotes.all %}
+                {% include '_note_tree.html' with notes=note.subnotes.all %}
+            {% endif %}
+        </li>
+    {% endfor %}
+</ul>

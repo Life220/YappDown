@@ -1,32 +1,52 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        {% load static %}
-        {% if note.title == "" %}
-            <title>NewNote</title>
-        {% else %}
-            <title>{{ note.title }}</title>
-        {% endif %}
-        <link rel="stylesheet" href="{% static 'main.css' %}">
-    </head>
+<head>
+    <title>Notes</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'main.css' %}">
+    <style>
+        .note-title {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 flex">
+    <!-- Sidebar -->
+    <div id="sideNav" class="bg-white w-64 p-4 shadow-md">
+        <h1 class="text-2xl font-bold text-center text-blue-600">YappDown</h1>
+        <ul class="pl-4">
+            {% for note in notes %}
+                <li>
+                    <a href="{% url 'note_detail' note.note_ID %}" class="block py-2 px-4 rounded hover:bg-gray-200">{{ note.title }}</a>
+                    {% if note.subnotes.all %}
+                        {% include '_note_tree.html' with notes=note.subnotes.all %}
+                    {% endif %}
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
 
-    <body>
-        <div id="sideNav">
-            <h1 class="text-2xl font-bold text-center text-blue-600">YappDown</h1>
-            <div>
-                TestNav
+    <!-- Main Content -->
+    <div id="mainContent" class="flex-1 p-4 ml-64 transition-all">
+        <h2 class="text-2xl font-bold mb-4">Create a New Note</h2>
+        <form method="post">
+            {% csrf_token %}
+            <div class="mb-4">
+                <label for="title" class="block text-sm font-medium text-gray-700">Title:</label>
+                <input type="text" id="title" name="title" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
             </div>
-        </div>
-
-        <div>
-        {% if note.title == "" %}
-            <h1>NewNote</h1>
-        {% else %}
-            <h1>{{ note.title }}</h1>
+            <div class="mb-4">
+                <label for="content" class="block text-sm font-medium text-gray-700">Content:</label>
+                <textarea id="content" name="content" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"></textarea>
+            </div>
+            <button type="submit" class="bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Save Note</button>
+        </form>
+        {% if success_message %}
+            <p class="mt-4 text-green-600">{{ success_message }}</p>
         {% endif %}
-            <div id="workspace">
-                <textarea></textarea>
-            </div>
-        </div>
-    </body>
+        {% if error_message %}
+            <p class="mt-4 text-red-600">{{ error_message }}</p>
+        {% endif %}
+    </div>
+</body>
 </html>

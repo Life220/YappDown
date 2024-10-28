@@ -19,9 +19,12 @@ from django.urls import path
 from app import views
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
     path('', views.login, name='login'),
     path('logout', views.logout, name='logout'),
     path('home', views.home, name='home'),
     path('register', views.register, name='register'),
+    path('note', views.note, name='note'),
+    path('note/<int:note_id>/', views.note_detail, name='note_detail'),
+    path('admin', views.admin, name='admin'),
+    path('toggle_access/<int:user_id>/', views.toggle_access, name='toggle_access'),
 ]

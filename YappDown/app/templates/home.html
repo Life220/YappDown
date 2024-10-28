@@ -11,17 +11,21 @@
                 {% csrf_token %}
                 <button type="submit" class="text-blue-600 hover:text-blue-800">Logout</button>
             </form>
+            {% if is_admin %}
+            <a href="{% url 'admin' %}" class="text-blue-600 hover:text-blue-800">Admin</a>
+            {% endif %}
+            <h1 class="text-4xl font-bold text-center text-blue-600 mb-8">YappDown</h1>
         </header>
 
         <main class="w-full max-w-4xl p-4">
+            <a href="{% url 'note' %}" class="bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 inline-block text-center">New Note</a>
+
             {% if notes %}
-            <h1 class="text-4xl font-bold text-center text-blue-600 mb-8">YappDown</h1>
             <div class="mb-8">
                 <div class="flex items-center mb-4">
                     <p class="mr-2">Search:</p>
                     <input type="text" class="border border-gray-300 rounded-md p-2 w-full" />
                 </div>
-                <button class="bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">New Note</button>
                 <div class="mt-4">
                     <h3 class="text-lg font-semibold">Filter</h3>
                     <p>Date created:</p>
