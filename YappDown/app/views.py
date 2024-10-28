@@ -99,28 +99,35 @@ def note(request, note_id=None):
         error_message = None
 
         if request.method == 'POST':
-            title = request.POST.get('title')
-            content = request.POST.get('content')
-            content_size_mb = len(content) / (1024 * 1024)  # Convert bytes to MB
-
-            if title and content:
+            if 'delete' in request.POST:
                 if note_id:
                     note = get_object_or_404(Note, pk=note_id)
-                    if total_storage_used - len(note.content) / (1024 * 1024) + content_size_mb <= max_storage:
-                        note.title = title
-                        note.content = content
-                        note.save()
-                        success_message = "Note updated successfully."
-                    else:
-                        error_message = "Not enough storage space to update the note."
-                else:
-                    if total_storage_used + content_size_mb <= max_storage:
-                        Note.objects.create(title=title, content=content, user_ID_id=user_id)
-                        success_message = "Note saved successfully."
-                    else:
-                        error_message = "Not enough storage space to create a new note."
+                    note.delete()
+                    success_message = "Note removed successfully."
+                    return redirect('home')
             else:
-                error_message = "Title and content are required."
+                title = request.POST.get('title')
+                content = request.POST.get('content')
+                content_size_mb = len(content) / (1024 * 1024)  # Convert bytes to MB
+
+                if title and content:
+                    if note_id:
+                        note = get_object_or_404(Note, pk=note_id)
+                        if total_storage_used - len(note.content) / (1024 * 1024) + content_size_mb <= max_storage:
+                            note.title = title
+                            note.content = content
+                            note.save()
+                            success_message = "Note updated successfully."
+                        else:
+                            error_message = "Not enough storage space to update the note."
+                    else:
+                        if total_storage_used + content_size_mb <= max_storage:
+                            Note.objects.create(title=title, content=content, user_ID_id=user_id)
+                            success_message = "Note saved successfully."
+                        else:
+                            error_message = "Not enough storage space to create a new note."
+                else:
+                    error_message = "Title and content are required."
 
         if note_id:
             note = get_object_or_404(Note, pk=note_id)

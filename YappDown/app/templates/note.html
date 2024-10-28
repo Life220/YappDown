@@ -23,11 +23,9 @@
 <body class="bg-gray-100 flex">
     <!-- Sidebar -->
     <div id="sideNav" class="bg-white w-64 p-4 shadow-md">
+        <a href="{% url 'home' %}" class="block py-2 px-4 rounded hover:bg-gray-200">Home</a>
         <h1 class="text-2xl font-bold text-center text-blue-600">YappDown</h1>
         <ul class="pl-4">
-            <li>
-                <a href="{% url 'home' %}" class="block py-2 px-4 rounded hover:bg-gray-200">Home</a>
-            </li>
             {% for note in notes %}
                 <li>
                     <a href="{% url 'note' note.note_ID %}" class="block py-2 px-4 rounded hover:bg-gray-200">{{ note.title }}</a>
@@ -53,6 +51,9 @@
                 <textarea id="content" name="content" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">{% if note %}{{ note.content }}{% endif %}</textarea>
             </div>
             <button type="submit" class="bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">{% if note %}Update Note{% else %}Save Note{% endif %}</button>
+            {% if note %}
+                <button type="submit" name="delete" value="delete" class="bg-red-600 text-white py-2 px-4 rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">Remove Note</button>
+            {% endif %}
         </form>
         {% if success_message %}
             <p class="mt-4 text-green-600">{{ success_message }}</p>
