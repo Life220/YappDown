@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        {% load static %}
+        {% if note.title == "" %}
+            <title>NewNote</title>
+        {% else %}
+            <title>{{ note.title }}</title>
+        {% endif %}
+        <link rel="stylesheet" href="{% static 'main.css' %}">
+    </head>
+
+    <body>
+        <div id="sideNav">
+            <h1 class="text-2xl font-bold text-center text-blue-600">YappDown</h1>
+            <div>
+                TestNav
+            </div>
+        </div>
+
+        <div>
+        {% if note.title == "" %}
+            <h1>NewNote</h1>
+        {% else %}
+            <h1>{{ note.title }}</h1>
+        {% endif %}
+            <div id="workspace">
+                <textarea></textarea>
+            </div>
+        </div>
+    </body>
+</html>

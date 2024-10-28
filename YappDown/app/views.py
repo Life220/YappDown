@@ -5,8 +5,6 @@ import hashlib
 import os
 
 autherised = False
-def autherise():
-    return 0
 
 def login(request):
     global autherised
@@ -34,6 +32,11 @@ def login(request):
         return render(request, 'login.html', {'error_message': error_message})
     else:
         return render(request, 'login.html')
+
+def logout(request):
+    global autherised
+    autherised = False
+    return redirect('login')
 
 def encrypt(password):
     if len(password) < 10:
@@ -76,4 +79,10 @@ def home(request):
     if autherised:
         return render(request, 'home.html')
     else:
-        return redirect('')
+        return redirect('login')
+    
+def note(request):
+    if autherised:
+        return render(request, 'note.html')
+    else:
+        return redirect('login')

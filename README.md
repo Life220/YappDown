@@ -1,5 +1,5 @@
 # YappDown
-A note taking app built in Django on Alpine Linux with Mariadb, SvelteJS and TailwindCSS using Docker.
+A note taking app built in Django on Alpine Linux with Mariadb and TailwindCSS using Docker.
 
 ### Required
 Alpine Linux
