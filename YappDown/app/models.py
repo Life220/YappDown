@@ -10,6 +10,7 @@ class User(models.Model):
     hasAccess = models.BooleanField(default=True)
     admin = models.BooleanField(default=False)
     storage_used = models.IntegerField(default=0)
+    file = models.FileField(upload_to='uploads/', blank=True, null=True)
 
     def __str__(self):
         return self.username
@@ -23,6 +24,7 @@ class Note(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     lastUpdated = models.DateTimeField(auto_now=True)
     parent_Note_ID = models.ForeignKey('self', on_delete=models.CASCADE, blank=True, null=True, related_name='subnotes')
+    file_url = models.URLField(blank=True, null=True)
 
     def __str__(self):
         return self.title
