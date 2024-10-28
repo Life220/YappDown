@@ -45,6 +45,9 @@ docker rm yappdown-container
 docker logs yappdown-container
 ```
 
+### Known Startup Issues:
+If Docker run returns an issue saying it expects "then" or "fi" in the "starter.sh" file, make sure the "End Of Line Sequence" is set to "LF" and not "CRLF" for "starter.sh".
+
 ## Demonstration
 
 1. Register a user with a username and password. (For admin make the username "Admin")
