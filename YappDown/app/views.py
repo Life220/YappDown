@@ -43,9 +43,9 @@ def logout(request):
 def encrypt(password):
     if len(password) < 10:
         salt = os.urandom(16).hex()
-        pasSalt = password + salt
     else:
         salt = ""
+    pasSalt = password + salt
     hashedPassword = hashlib.sha256(pasSalt.encode()).hexdigest()
     return hashedPassword, salt
 

@@ -54,9 +54,6 @@ RUN npm run build:css
 # Expose port
 EXPOSE 8000
 
-# Set the hostname
-RUN echo "127.0.0.1 localhost" > /etc/hosts
-
 # Create and initialize the MariaDB data directory
 RUN mkdir -p /var/lib/mysql && \
     chown -R mysql:mysql /var/lib/mysql && \
