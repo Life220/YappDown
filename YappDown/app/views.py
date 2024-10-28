@@ -149,8 +149,6 @@ def note(request, note_id=None):
                             error_message = "Not enough storage space to add this note."
                         else:
                             note = Note.objects.create(title=title, content=content, user_ID_id=user_id)
-                            if file:
-                                note.file_url = file_url
                             note.save()
                             success_message = "Note saved successfully."
                 else:
