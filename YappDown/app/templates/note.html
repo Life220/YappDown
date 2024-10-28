@@ -5,13 +5,15 @@
     {% load static %}
     <link rel="stylesheet" href="{% static 'main.css' %}">
     <style>
-        html, body {
+        html, body
+        {
             height: 100%;
             width: 100%;
             margin: 0;
         }
 
-        #sideNav {
+        #sideNav
+        {
             height: 100vh;
             position: fixed;
             top: 0;
@@ -51,8 +53,7 @@
                 </div>
                 <div class="mb-4">
                     <label for="content" class="block text-sm font-medium text-green-700">Content:</label>
-                    <textarea id="content" name="content" required class="mt-1 block w-full px-3 py-2 border border-green-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm">{% if note %}{{ note.content }}{% endif %}</textarea>
-                </div>
+                    <textarea id="content" name="content" required class="mt-1 block w-full px-3 py-2 border border-green-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm">{% if note %}{{ note.content }}{% endif %}</textarea>                </div>
             </div>
             <div class="mb-4">
                 <label for="file" class="block text-sm font-medium text-green-700">Upload File:</label>
@@ -92,10 +93,13 @@
     </div>
 
     <script>
-        async function handleFileUpload(event) {
+        async function handleFileUpload(event)
+        {
             const file = event.target.files[0];
             const noteFields = document.getElementById('noteFields');
             const filePreview = document.getElementById('filePreview');
+            const titleInput = document.getElementById('title');
+            const contentTextarea = document.getElementById('content');
 
             if (file)
             {
@@ -122,6 +126,9 @@
                 else
                 {
                     noteFields.style.display = 'none';
+                    const title = file.name.replace('.pdf', '');
+                    document.getElementById('title').value = title;
+                    contentTextarea.required = false;
                     if (file.type === "application/pdf")
                     {
                         filePreview.innerHTML = `<embed src="${URL.createObjectURL(file)}" width="600" height="400" type="application/pdf">`;
@@ -133,6 +140,24 @@
                 }
             }
         }
+
+        async function autoUploadPDF()
+        {
+            const noteFileUrl = "{{ note.file_url }}";
+            const filePreview = document.getElementById('filePreview');
+            if (noteFileUrl)
+            {
+                if (noteFileUrl.endsWith('.pdf'))
+                {
+                    filePreview.innerHTML = `<embed src="${noteFileUrl}" width="600" height="400" type="application/pdf">`;
+                } else if (noteFileUrl.endsWith('.docx'))
+                {
+                    filePreview.innerHTML = `<p>DOCX file uploaded. <a href="${noteFileUrl}" class="text-green-600 hover:text-green-500">Download</a></p>`;
+                }
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', autoUploadPDF);
     </script>
 </body>
 </html>

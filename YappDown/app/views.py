@@ -4,6 +4,8 @@ from django.http import HttpResponse
 from .models import User, Note
 import hashlib
 import os
+import shutil
+import psutil
 
 def login(request):
     if request.method == 'POST':
@@ -78,6 +80,7 @@ def home(request):
         storage_left = max_storage - total_storage_used
 
         return render(request, 'home.html', {
+            'user': user,
             'notes': notes,
             'total_storage_used': total_storage_used,
             'storage_left': storage_left,
@@ -127,7 +130,7 @@ def note(request, note_id=None):
                     success_message = "Note removed successfully."
                     return redirect('home')
             else:
-                if title and content:
+                if title and (content or file):
                     if note_id:
                         note = get_object_or_404(Note, pk=note_id, user_ID_id=user_id)
                         current_note_size = len(note.content) / (1024 * 1024)  # Convert bytes to MB
@@ -177,9 +180,19 @@ def admin(request):
         if user.admin:
             users = User.objects.all()
             total_storage = sum(user.storage_used for user in users)
+            
+            # Get disk usage
+            total, used, free = shutil.disk_usage("/")
+            disk_storage_left = free / (1024 * 1024 * 1024)  # Convert bytes to GB
+            
+            # Get CPU usage
+            cpu_usage = psutil.cpu_percent(interval=1)
+            
             return render(request, 'admin.html', {
                 'users': users,
-                'total_storage': total_storage
+                'total_storage': total_storage,
+                'disk_storage_left': disk_storage_left,
+                'cpu_usage': cpu_usage
             })
         else:
             return HttpResponse("You are not authorized to view this page.", status=403)

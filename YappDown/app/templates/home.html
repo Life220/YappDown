@@ -15,6 +15,7 @@
             <a href="{% url 'admin' %}" class="text-green-600 hover:text-green-800">Admin</a>
         {% endif %}
     </header>
+
     <main class="flex-1 p-4">
         <div class="max-w-4xl mx-auto">
             <div class="mb-4">
@@ -23,25 +24,32 @@
                 <p>Storage Left: {{ storage_left|floatformat:2 }} MB</p>
                 <p>Max Storage: {{ max_storage }} MB</p>
             </div>
-            <div class="mb-4">
-                <a href="{% url 'note' %}" class="bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 inline-block text-center">New Note</a>
-                {% if notes %}
-                <h2 class="text-xl font-bold text-green-700">Your Notes</h2>
-                <ul class="space-y-2">
-                    {% for note in notes %}
-                        <li class="bg-white p-4 rounded shadow-md">
-                            <h3 class="text-lg font-bold text-green-700">{{ note.title }}</h3>
-                            <p>{{ note.content }}</p>
-                            <p>Created: {{ note.created }}</p>
-                            <p>Last updated: {{ note.lastUpdated }}</p>
-                            <a href="{% url 'note' note.note_ID %}" class="text-green-600 hover:text-green-500">Edit</a>
-                        </li>
-                    {% endfor %}
-                </ul>
-                {% else %}
-                    <p class="text-green-600">You have no notes.</p>
-                {% endif %}
-            </div>
+            {% if not user.hasAccess %}
+                <div class="mb-4">
+                    <h2 class="text-xl font-bold text-red-700">Access Denied</h2>
+                    <p class="text-red-600">You do not have access to this application. Please contact the administrator for access.</p>
+                </div>
+            {% else %}
+                <div class="mb-4">
+                    <a href="{% url 'note' %}" class="bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 inline-block text-center">New Note</a>
+                    {% if notes %}
+                    <h2 class="text-xl font-bold text-green-700">Your Notes</h2>
+                    <ul class="space-y-2">
+                        {% for note in notes %}
+                            <li class="bg-white p-4 rounded shadow-md">
+                                <h3 class="text-lg font-bold text-green-700">{{ note.title }}</h3>
+                                <p>{{ note.content }}</p>
+                                <p>Created: {{ note.created }}</p>
+                                <p>Last updated: {{ note.lastUpdated }}</p>
+                                <a href="{% url 'note' note.note_ID %}" class="text-green-600 hover:text-green-500">Edit</a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                    {% else %}
+                        <p class="text-green-600">You have no notes.</p>
+                    {% endif %}
+                </div>
+            {% endif %}
         </div>
     </main>
 </body>

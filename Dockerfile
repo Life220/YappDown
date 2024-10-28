@@ -31,7 +31,8 @@ RUN python3 -m venv /YappDown/venv
 
 # Upgrade pip and install Python packages within the virtual environment
 RUN /YappDown/venv/bin/pip install --upgrade pip && \
-    /YappDown/venv/bin/pip install django mysqlclient
+    /YappDown/venv/bin/pip install django mysqlclient && \
+    /YappDown/venv/bin/pip install psutil
 
 ## Tailwind CSS
 # Copy package.json

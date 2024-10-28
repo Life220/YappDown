@@ -9,13 +9,16 @@
     <nav class="bg-green-600 p-4">
         <div class="container mx-auto flex justify-between items-center">
             <a href="{% url 'home' %}" class="text-white text-lg font-bold">Home</a>
+            <h1 class="text-3xl font-bold text-center text-green-700 mb-10">YappDown</h1>
             <span class="text-white">Admin Panel</span>
         </div>
     </nav>
 
     <div class="container mx-auto mt-8 flex-1">
-        <h1 class="text-2xl font-bold mb-4 text-green-700">Admin Panel</h1>
-        <p class="mb-4 text-green-700">Total Storage: {{ total_storage }} MB</p>
+        <h1 class="text-2xl font-bold mb-4 text-white">Admin Panel</h1>
+        <p class="mb-4 text-green-700">Total Storage Used: {{ total_storage }} MB</p>
+        <p class="mb-4 text-green-700">Disk Storage Left: {{ disk_storage_left|floatformat:2 }} GB</p>
+        <p class="mb-4 text-green-700">CPU Usage: {{ cpu_usage }} %</p>
         
         <input type="text" id="searchInput" placeholder="Search for users..." class="mb-4 p-2 border border-green-300 rounded">
         
@@ -56,16 +59,20 @@
         </table>
                     
         <script>
-            document.getElementById('searchInput').addEventListener('keyup', function() {
+            document.getElementById('searchInput').addEventListener('keyup', function(){
                 var filter = this.value.toUpperCase();
                 var rows = document.querySelector("#userTable tbody").rows;
                 
-                for (var i = 0; i < rows.length; i++) {
-                    var username = rows[i].cells[0].textContent.toUpperCase();
-                    if (username.indexOf(filter) > -1) {
-                        rows[i].style.display = "";
-                    } else {
-                        rows[i].style.display = "none";
+                for (var k = 0; k < rows.length; k++)
+                {
+                    var username = rows[k].cells[0].textContent.toUpperCase();
+                    if (username.indexOf(filter) > -1)
+                    {
+                        rows[k].style.display = "";
+                    }
+                    else
+                    {
+                        rows[k].style.display = "none";
                     }
                 }
             });
