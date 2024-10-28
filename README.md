@@ -2,14 +2,13 @@
 A note taking app built in Django on Alpine Linux with Mariadb and TailwindCSS using Docker.
 
 ### Required
-Alpine Linux
-Django
-Mariadb
-Docker
+Alpine Linux,
+Django,
+Mariadb,
+Docker.
 
 ### Personal choices
-TailwindCSS:
-TailwindCSS uses utility-first classes to apply styles directly in the HTML, resulting in smaller and more maintainable stylesheets
+TailwindCSS: uses utility-first classes to apply styles directly in the HTML, resulting in smaller and more maintainable stylesheets
 
 ## Compile and Run
 ### Automatically (recommended)
@@ -19,15 +18,16 @@ chmod +x yappdown.sh
 ./yappdown.sh
 ```
 
-
 ### Manually compile 
+#### Build:
+    docker build -t yappdown . --network=host
 #### Run:
-```sh
-docker build -t yappdown . --network=host
-docker run -d -p 8000:8000 --name yappdown-container yappdown
-```
+##### Docker Image:
+    docker run -p 8000:8000 yappdown
+##### or Docker Container:
+    docker run -d -p 8000:8000 --name yappdown-container yappdown
 
-#### Stop:
+#### Stop (Docker Container):
 ```sh
 docker stop yappdown-container
 docker rm yappdown-container
@@ -62,7 +62,7 @@ You may also upload a file as a note (pdf, docx, txt)
 14. Register as an Admin (See step 1)
 15. You will notice an "Admin" button in the top left corner under the "Logout" button, click the "Admin" button.
 16. This is the Admin page.
-here you can see the "Total Storage Used", "Disk Storage Left", "Cpu Usage" and a searchable table of users.
+Here you can see the "Total Storage Used", "Disk Storage Left", "Cpu Usage" and a searchable table of users.
 As an admin you have the ability to revoke a users access to the application and grant it back. This will not remove access entirely, the user will just not be able to view, create or edit notes.
 17. Remove your access, (remove "Admin"s access)
 18. Return to the home page with the button "Home" in the top left corner.
