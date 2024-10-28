@@ -24,7 +24,7 @@ urlpatterns = [
     path('home', views.home, name='home'),
     path('register', views.register, name='register'),
     path('note', views.note, name='note'),
-    path('note/<int:note_id>/', views.note_detail, name='note_detail'),
+    path('note/<int:note_id>/', views.note, name='note'),
     path('admin', views.admin, name='admin'),
     path('toggle_access/<int:user_id>/', views.toggle_access, name='toggle_access'),
 ]

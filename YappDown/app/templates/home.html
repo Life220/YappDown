@@ -1,66 +1,46 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>YappDown</title>
-        {% load static %}
-        <link rel="stylesheet" href="{% static 'main.css' %}">
-    </head>
-    <body class="bg-gray-100 min-h-screen flex flex-col items-center">
-        <header class="w-full bg-white shadow-md">
-            <form method="post" action="{% url 'logout' %}" class="inline">
-                {% csrf_token %}
-                <button type="submit" class="text-blue-600 hover:text-blue-800">Logout</button>
-            </form>
-            {% if is_admin %}
+<head>
+    <title>Home</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'main.css' %}">
+</head>
+<body class="bg-gray-100 flex flex-col min-h-screen">
+    <header class="bg-white shadow-md p-4">
+        <h1 class="text-2xl font-bold text-center text-blue-600">YappDown</h1>
+        <div class="text-center">
+            <a href="{% url 'logout' %}" class="text-indigo-600 hover:text-indigo-500">Logout</a>
+        </div>
+        {% if is_admin %}
             <a href="{% url 'admin' %}" class="text-blue-600 hover:text-blue-800">Admin</a>
-            {% endif %}
-            <h1 class="text-4xl font-bold text-center text-blue-600 mb-8">YappDown</h1>
-        </header>
-
-        <main class="w-full max-w-4xl p-4">
-            <a href="{% url 'note' %}" class="bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 inline-block text-center">New Note</a>
-
-            {% if notes %}
-            <div class="mb-8">
-                <div class="flex items-center mb-4">
-                    <p class="mr-2">Search:</p>
-                    <input type="text" class="border border-gray-300 rounded-md p-2 w-full" />
-                </div>
-                <div class="mt-4">
-                    <h3 class="text-lg font-semibold">Filter</h3>
-                    <p>Date created:</p>
-                </div>
+        {% endif %}
+    </header>
+    <main class="flex-1 p-4">
+        <div class="max-w-4xl mx-auto">
+            <div class="mb-4">
+                <h2 class="text-xl font-bold">Storage Information</h2>
+                <p>Total Storage Used: {{ total_storage_used|floatformat:2 }} MB</p>
+                <p>Storage Left: {{ storage_left|floatformat:2 }} MB</p>
+                <p>Max Storage: {{ max_storage }} MB</p>
             </div>
-
-            <!-- Show made notes -->
-            <div id="presentNotes">
-                <div id="notesCarousel" class="carousel slide" data-ride="carousel">
-                    <div class="carousel-inner">
-                        {% for note in notes %}
-                        <div class="carousel-item {% if forloop.first %}active{% endif %}">
-                            <div class="d-block w-100 p-4 bg-white rounded-md shadow-md mb-4">
-                                <h3 class="text-xl font-semibold">{{ note.title }}</h3>
-                                <p class="mt-2">{{ note.content }}</p>
-                                <small class="text-gray-500">Last updated: {{ note.lastUpdated }}</small>
-                            </div>
-                        </div>
-                        {% endfor %}
-                    </div>
-                    <a class="carousel-control-prev" href="#notesCarousel" role="button" data-slide="prev">
-                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                        <span class="sr-only">Previous</span>
-                    </a>
-                    <a class="carousel-control-next" href="#notesCarousel" role="button" data-slide="next">
-                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                        <span class="sr-only">Next</span>
-                    </a>
-                </div>
+            <div class="mb-4">
+                <a href="{% url 'note' %}" class="bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 inline-block text-center">New Note</a>
+                {% if notes %}
+                <h2 class="text-xl font-bold">Your Notes</h2>
+                <ul class="space-y-2">
+                    {% for note in notes %}
+                        <li class="bg-white p-4 rounded shadow-md">
+                            <h3 class="text-lg font-bold">{{ note.title }}</h3>
+                            <p>{{ note.content }}</p>
+                            <a href="{% url 'note' note.note_ID %}" class="text-indigo-600 hover:text-indigo-500">Edit</a>
+                        </li>
+                    {% endfor %}
+                </ul>
                 {% else %}
-                <div class="text-center text-gray-500">
-                    <p>No notes</p>
-                </div>
+                    <p class="text-gray-600">You have no notes.</p>
+                {% endif %}
             </div>
-            {% endif %}
-        </main>
-    </body>
+        </div>
+    </main>
+</body>
 </html>

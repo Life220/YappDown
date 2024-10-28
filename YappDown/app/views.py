@@ -71,22 +71,54 @@ def home(request):
     user_id = request.session.get('user_id')
     if user_id:
         user = User.objects.get(user_ID=user_id)
-        return render(request, 'home.html', {'is_admin': user.admin})
+        notes = Note.objects.filter(user_ID=user)
+        total_storage_used = sum(len(note.content) for note in notes) / (1024 * 1024)  # Convert bytes to MB
+        max_storage = 10  # 10 MB
+        storage_left = max_storage - total_storage_used
+
+        return render(request, 'home.html', {
+            'notes': notes,
+            'total_storage_used': total_storage_used,
+            'storage_left': storage_left,
+            'max_storage': max_storage,
+            'is_admin': user.admin
+        })
     else:
         return redirect('login')
             
 def note(request, note_id=None):
     user_id = request.session.get('user_id')
     if user_id:
+        user = User.objects.get(user_ID=user_id)
+        notes = Note.objects.filter(user_ID=user)
+        total_storage_used = sum(len(note.content) for note in notes) / (1024 * 1024)  # Convert bytes to MB
+        max_storage = 10
+        storage_left = max_storage - total_storage_used
+
         success_message = None
         error_message = None
 
         if request.method == 'POST':
             title = request.POST.get('title')
             content = request.POST.get('content')
+            content_size_mb = len(content) / (1024 * 1024)  # Convert bytes to MB
+
             if title and content:
-                Note.objects.create(title=title, content=content, user_ID_id=user_id)
-                success_message = "Note saved successfully."
+                if note_id:
+                    note = get_object_or_404(Note, pk=note_id)
+                    if total_storage_used - len(note.content) / (1024 * 1024) + content_size_mb <= max_storage:
+                        note.title = title
+                        note.content = content
+                        note.save()
+                        success_message = "Note updated successfully."
+                    else:
+                        error_message = "Not enough storage space to update the note."
+                else:
+                    if total_storage_used + content_size_mb <= max_storage:
+                        Note.objects.create(title=title, content=content, user_ID_id=user_id)
+                        success_message = "Note saved successfully."
+                    else:
+                        error_message = "Not enough storage space to create a new note."
             else:
                 error_message = "Title and content are required."
 
@@ -95,12 +127,14 @@ def note(request, note_id=None):
         else:
             note = None
 
-        notes = Note.objects.filter(parent_Note_ID__isnull=True)
         return render(request, 'note.html', {
             'note': note,
             'notes': notes,
             'success_message': success_message,
-            'error_message': error_message
+            'error_message': error_message,
+            'total_storage_used': total_storage_used,
+            'storage_left': storage_left,
+            'max_storage': max_storage
         })
     else:
         return redirect('login')
