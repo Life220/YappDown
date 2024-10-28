@@ -30,8 +30,10 @@
                     <p class="text-red-600">You do not have access to this application. Please contact the administrator for access.</p>
                 </div>
             {% else %}
-                <div class="mb-4">
-                    <a href="{% url 'note' %}" class="bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 inline-block text-center">New Note</a>
+            <div class="mb-4 mt-4">
+                    {% if not user.storage_used >= 10 %}
+                        <a href="{% url 'note' %}" class="bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 inline-block text-center">New Note</a>
+                    {% endif %}
                     {% if notes %}
                     <h2 class="text-xl font-bold text-green-700">Your Notes</h2>
                     <ul class="space-y-2">
@@ -41,7 +43,9 @@
                                 <p>{{ note.content }}</p>
                                 <p>Created: {{ note.created }}</p>
                                 <p>Last updated: {{ note.lastUpdated }}</p>
-                                <a href="{% url 'note' note.note_ID %}" class="text-green-600 hover:text-green-500">Edit</a>
+                                {% if not user.storage_used >= 10 %}
+                                    <a href="{% url 'note' note.note_ID %}" class="text-green-600 hover:text-green-500">Edit</a>
+                                {% endif %}
                             </li>
                         {% endfor %}
                     </ul>
