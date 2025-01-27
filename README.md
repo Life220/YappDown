@@ -14,7 +14,14 @@ TailwindCSS: uses utility-first classes to apply styles directly in the HTML, re
 ### Automatically (recommended)
 ```sh
 chmod +x yappdown.sh
+```
+and
+```sh
 ./yappdown.sh
+```
+or
+```sh
+bash yappdown.sh
 ```
 
 ### Manually compile 
